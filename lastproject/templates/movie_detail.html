@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }}</title>
+</head>
+<body>
+    <h1>{{ movie.title }}</h1>
+    <img src="{{ movie.poster.url }}" alt="{{ movie.title }} poster">
+    <p>{{ movie.description }}</p>
+    <p>Release Date: {{ movie.release_date }}</p>
+    <p>Actors: {{ movie.actors }}</p>
+    <p>Category: {{ movie.category }}</p>
+    <p>Director: {{ movie.director }}</p>
+    <h2>Reviews</h2>
+    {% for review in reviews %}
+        <div>
+            <strong>{{ review.user.username }}</strong> rated it {{ review.rating }} stars
+            <p>{{ review.review_text }}</p>
+            <p><em>{{ review.created_at }}</em></p>
+        </div>
+    {% empty %}
+        <p>No reviews yet. Be the first to review!</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <h2>Submit a Review</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Submit Review</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to submit a review.</p>
+    {% endif %}
+</body>
+</html>
